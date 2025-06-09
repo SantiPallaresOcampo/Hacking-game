@@ -7,19 +7,110 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="emergency-bar left"></div>
+  <div class="emergency-bar right"></div>
   <div class="container">
-    <h1>Misión #001: Infiltración Inicial</h1>
-    <div class="video-container">
+    <div class="video-container" style="display: flex; justify-content: center; align-items: center;">
       <iframe width="560" height="315" src="https://www.youtube.com/embed/2yJgwwDcgV8"
         title="YouTube video player" frameborder="0" allowfullscreen></iframe>
     </div>
     <p class="hidden" id="mission-text">
-      Hemos interceptado una transmisión que parece inocente, pero esconde una pista.<br>
-      Nuestra IA detecta un patrón oculto en un puzle antiguo… un Sudoku.<br>
-      Resuélvelo para encontrar una IP. Esa IP podría ser la clave para acceder al sistema del mafioso.
+      así es, soy yo el gran mafioso!! JAJAJA, tengo a hello kitty y solo podrás recuperarla si pagas la millonada que pido, más te vale darte prisa en conseguir mi dinero, o si no, mejor ni quieras saberlo muajajajaja
     </p>
     <button id="start-btn">¿¿¿Cómo???</button>
+    <button id="pay-btn" class="hidden"><span style="font-size:1.2em;vertical-align:middle;">💸</span> PAGAR</button>
+    <div id="money-error" class="hidden" style="opacity:1;transition:opacity 1.5s;position:relative;margin-top:20px;font-size:1.2em;color:#e91e63;font-weight:bold;"></div>
+  </div>
+  <div id="hacker-popup" class="hidden">
+    <div class="hacker-popup-content">
+      <span class="hacker-title">💻 Mensaje entrante...</span>
+      <p>hey! yo te puedo ayudar, he visto tu situación, soy un hacker ético y estoy aquí por si quieres mi ayuda</p>
+      <button id="help-btn">recibir ayuda</button>
+    </div>
   </div>
   <script src="script.js"></script>
+  <script>
+    // Barras laterales animadas
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .emergency-bar {
+        position: fixed;
+        top: 0;
+        width: 60px;
+        height: 100vh;
+        z-index: 2;
+        background: repeating-linear-gradient(135deg, #ffeb3b 0 20px, #222 20px 40px);
+        background-size: 40px 40px;
+        animation: moveBars 2s linear infinite;
+      }
+      .emergency-bar.left { left: 0; }
+      .emergency-bar.right { right: 0; transform: scaleX(-1); }
+      @keyframes moveBars { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+      #hacker-popup {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 100;
+        background: rgba(10,30,10,0.97);
+        border: 2px solid #0f0;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #0f08;
+        padding: 18px 24px;
+        min-width: 260px;
+        color: #0f0;
+        font-family: 'Courier New', Courier, monospace;
+        animation: popupHacker 0.7s ease;
+      }
+      .hacker-popup-content { text-align: left; }
+      .hacker-title { font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 8px; }
+      #help-btn {
+        margin-top: 10px;
+        background: #111;
+        color: #0f0;
+        border: 1px solid #0f0;
+        border-radius: 5px;
+        padding: 7px 18px;
+        font-family: 'Courier New', Courier, monospace;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background 0.2s;
+      }
+      #help-btn:hover { background: #222; }
+    `;
+    document.head.appendChild(style);
+
+    // Mostrar pop-up hacker después de más segundos (delay aumentado)
+    let popupTimeout;
+    function showHackerPopup() {
+      document.getElementById('hacker-popup').classList.remove('hidden');
+    }
+    function startPopupTimer() {
+      if (popupTimeout) clearTimeout(popupTimeout);
+      popupTimeout = setTimeout(showHackerPopup, 7000); // 7 segundos para más tensión
+    }
+    // Modifica el comportamiento del botón principal
+    document.getElementById('start-btn').onclick = function() {
+      document.getElementById('mission-text').classList.remove('hidden');
+      document.getElementById('pay-btn').classList.remove('hidden');
+      startPopupTimer();
+    };
+    // Botón de pagar
+    document.getElementById('pay-btn').onclick = function() {
+      const msg = document.getElementById('money-error');
+      msg.textContent = 'NO TIENES EL SUFICIENTE DINERO';
+      msg.classList.remove('hidden');
+      msg.style.opacity = 1;
+      setTimeout(() => {
+        msg.style.opacity = 0;
+      }, 1000);
+      setTimeout(() => {
+        msg.classList.add('hidden');
+      }, 1700);
+    };
+    // Botón de ayuda
+    document.getElementById('help-btn').onclick = function() {
+      window.location.href = 'hacker.html';
+    };
+  </script>
 </body>
 </html>
