@@ -14,5 +14,79 @@
     Preparando entorno de ataque...</p>
     <a href="final.html">Continuar</a>
   </div>
+  <div class="maze-container">
+    <h2>Defensas del ordenador del mafioso</h2>
+    <div id="maze"></div>
+    <div id="maze-success" style="display:none; color:#0f0; font-size:1.2em; margin-top:20px;">¡Has superado el laberinto!</div>
+    <button id="mafioso-final-btn" style="display:none; margin-top:20px; padding:12px 28px; font-size:1.1em; border-radius:7px; border:1px solid #0f0; background:#111; color:#0f0; cursor:pointer; font-family:'Courier New', Courier, monospace; transition:background 0.2s;">Acceder al ordenador del mafioso</button>
+  </div>
+  <script>
+    // Laberinto simple (1: pared, 0: camino, S: start, E: exit)
+    const mazeData = [
+      ['1','1','1','1','1','1','1','1','1','1'],
+      ['1','S','0','0','1','0','0','0','0','1'],
+      ['1','1','1','0','1','0','1','1','0','1'],
+      ['1','0','0','0','0','0','1','0','0','1'],
+      ['1','0','1','1','1','0','1','0','1','1'],
+      ['1','0','1','E','1','0','0','0','0','1'],
+      ['1','0','1','1','1','1','1','1','0','1'],
+      ['1','0','0','0','0','0','0','1','0','1'],
+      ['1','1','1','1','1','1','1','1','1','1']
+    ];
+    let playerPos = {x: 1, y: 1};
+    function renderMaze() {
+      const maze = document.getElementById('maze');
+      maze.innerHTML = '';
+      for (let y = 0; y < mazeData.length; y++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'maze-row';
+        for (let x = 0; x < mazeData[y].length; x++) {
+          const cellDiv = document.createElement('div');
+          cellDiv.className = 'maze-cell';
+          if (mazeData[y][x] === '1') cellDiv.classList.add('maze-wall');
+          if (x === playerPos.x && y === playerPos.y) cellDiv.classList.add('maze-player');
+          if (mazeData[y][x] === 'E') cellDiv.classList.add('maze-exit');
+          rowDiv.appendChild(cellDiv);
+        }
+        maze.appendChild(rowDiv);
+      }
+    }
+    function canMove(x, y) {
+      return mazeData[y][x] !== '1';
+    }
+    function checkExit() {
+      if (mazeData[playerPos.y][playerPos.x] === 'E') {
+        document.getElementById('maze-success').style.display = 'block';
+        document.getElementById('mafioso-final-btn').style.display = 'inline-block';
+      }
+    }
+    document.addEventListener('keydown', function(e) {
+      let moved = false;
+      if (e.key === 'ArrowUp' && canMove(playerPos.x, playerPos.y-1)) {
+        playerPos.y--;
+        moved = true;
+      }
+      if (e.key === 'ArrowDown' && canMove(playerPos.x, playerPos.y+1)) {
+        playerPos.y++;
+        moved = true;
+      }
+      if (e.key === 'ArrowLeft' && canMove(playerPos.x-1, playerPos.y)) {
+        playerPos.x--;
+        moved = true;
+      }
+      if (e.key === 'ArrowRight' && canMove(playerPos.x+1, playerPos.y)) {
+        playerPos.x++;
+        moved = true;
+      }
+      if (moved) {
+        renderMaze();
+        checkExit();
+      }
+    });
+    document.getElementById('mafioso-final-btn').onclick = function() {
+      window.location.href = 'final.html';
+    };
+    renderMaze();
+  </script>
 </body>
 </html>
