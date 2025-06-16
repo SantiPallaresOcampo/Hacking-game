@@ -1,116 +1,164 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Misión #001: Infiltración</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Cuenta Atrás - Hello Kitty</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #222 url('hellokitty jail.png') center center no-repeat;
+      background-size: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .emergency-bar {
+      position: fixed;
+      top: 0;
+      width: 60px;
+      height: 100vh;
+      z-index: 2;
+      background: repeating-linear-gradient(
+        135deg,
+        #ffeb3b 0 20px,
+        #222 20px 40px
+      );
+      background-size: 40px 40px;
+      animation: moveBars 2s linear infinite;
+    }
+    .emergency-bar.left {
+      left: 0;
+    }
+    .emergency-bar.right {
+      right: 0;
+      transform: scaleX(-1);
+    }
+    @keyframes moveBars {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+    .content {
+      background: rgba(0,0,0,0.7);
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 500px;
+      text-align: center;
+      z-index: 3;
+      box-shadow: 0 0 30px #000b;
+    }
+    .ransom-text {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2px;
+    }
+    .ransom-text span {
+      display: inline-block;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+      /* Tipografías variadas */
+    }
+    /* Ejemplo de tipografías ransom */
+    .f1 { font-family: 'Impact', fantasy; color: #ffeb3b; background: #222; transform: rotate(-2deg); }
+    .f2 { font-family: 'Comic Sans MS', cursive, sans-serif; color: #e91e63; background: #fff; transform: rotate(2deg); }
+    .f3 { font-family: 'Courier New', Courier, monospace; color: #fff; background: #607d8b; transform: rotate(-1deg); }
+    .f4 { font-family: 'Arial Black', Arial, sans-serif; color: #222; background: #ffeb3b; transform: rotate(1deg); }
+    .f5 { font-family: 'Times New Roman', Times, serif; color: #fff; background: #e91e63; transform: rotate(-3deg); }
+    .f6 { font-family: 'Verdana', Geneva, sans-serif; color: #607d8b; background: #fff; transform: rotate(3deg); }
+    .countdown {
+      font-size: 2.2rem;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ffeb3b;
+      background: #222;
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: inline-block;
+      letter-spacing: 2px;
+    }
+    #rescue-btn {
+      display: none;
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      background: #e91e63;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Impact', fantasy;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 10px #000a;
+      transition: background 0.2s;
+    }
+    #rescue-btn:hover {
+      background: #ad1457;
+    }
+  </style>
 </head>
 <body>
   <div class="emergency-bar left"></div>
   <div class="emergency-bar right"></div>
-  <div class="container">
-    <div class="video-container" style="display: flex; justify-content: center; align-items: center;">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/2yJgwwDcgV8"
-        title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p class="hidden" id="mission-text">
-      así es, soy yo el gran mafioso!! JAJAJA, tengo a hello kitty y solo podrás recuperarla si pagas la millonada que pido, más te vale darte prisa en conseguir mi dinero, o si no, mejor ni quieras saberlo muajajajaja
-    </p>
-    <button id="start-btn">¿¿¿Cómo???</button>
-    <button id="pay-btn" class="hidden"><span style="font-size:1.2em;vertical-align:middle;">💸</span> PAGAR</button>
-    <div id="money-error" class="hidden" style="opacity:1;transition:opacity 1.5s;position:relative;margin-top:20px;font-size:1.2em;color:#e91e63;font-weight:bold;"></div>
+  <div class="content">
+    <div class="ransom-text" id="ransom-text"></div>
+    <div class="countdown" id="countdown"></div>
+    <button id="rescue-btn">Recupera a Hello Kitty</button>
   </div>
-  <div id="hacker-popup" class="hidden">
-    <div class="hacker-popup-content">
-      <span class="hacker-title">💻 Mensaje entrante...</span>
-      <p>hey! yo te puedo ayudar, he visto tu situación, soy un hacker ético y estoy aquí por si quieres mi ayuda</p>
-      <button id="help-btn">recibir ayuda</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
   <script>
-    // Barras laterales animadas
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .emergency-bar {
-        position: fixed;
-        top: 0;
-        width: 60px;
-        height: 100vh;
-        z-index: 2;
-        background: repeating-linear-gradient(135deg, #ffeb3b 0 20px, #222 20px 40px);
-        background-size: 40px 40px;
-        animation: moveBars 2s linear infinite;
+    // Texto a mostrar, se separa en letras para ransom
+    const ransom = `Hello Kitty ha sido raptada, cuando la cuenta atrás finalize te daremos más información, si intentas buscarla antes del tiempo que te hemos dicho nos desharemos de ella! Sí, Ash TE HABLAMOS A TÍ!`;
+    const fonts = ['f1','f2','f3','f4','f5','f6'];
+    const ransomText = document.getElementById('ransom-text');
+    ransom.split(/(\s)/).forEach((char, i) => {
+      if (char === ' ') {
+        const space = document.createElement('span');
+        space.style.display = 'inline-block';
+        space.style.width = '0.6em';
+        ransomText.appendChild(space);
+      } else if (char === '\n') {
+        ransomText.appendChild(document.createElement('br'));
+      } else if (char) {
+        const span = document.createElement('span');
+        span.className = fonts[Math.floor(Math.random()*fonts.length)];
+        span.textContent = char;
+        ransomText.appendChild(span);
       }
-      .emergency-bar.left { left: 0; }
-      .emergency-bar.right { right: 0; transform: scaleX(-1); }
-      @keyframes moveBars { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
-      #hacker-popup {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        z-index: 100;
-        background: rgba(10,30,10,0.97);
-        border: 2px solid #0f0;
-        border-radius: 10px;
-        box-shadow: 0 0 20px #0f08;
-        padding: 18px 24px;
-        min-width: 260px;
-        color: #0f0;
-        font-family: 'Courier New', Courier, monospace;
-        animation: popupHacker 0.7s ease;
-      }
-      .hacker-popup-content { text-align: left; }
-      .hacker-title { font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 8px; }
-      #help-btn {
-        margin-top: 10px;
-        background: #111;
-        color: #0f0;
-        border: 1px solid #0f0;
-        border-radius: 5px;
-        padding: 7px 18px;
-        font-family: 'Courier New', Courier, monospace;
-        cursor: pointer;
-        font-size: 1em;
-        transition: background 0.2s;
-      }
-      #help-btn:hover { background: #222; }
-    `;
-    document.head.appendChild(style);
+    });
 
-    // Mostrar pop-up hacker después de más segundos (delay aumentado)
-    let popupTimeout;
-    function showHackerPopup() {
-      document.getElementById('hacker-popup').classList.remove('hidden');
+    // FECHA OBJETIVO (ajusta la fecha y hora aquí)
+    const targetDate = new Date('2025-06-21T20:00:00'); // Cambia la fecha objetivo aquí
+    const countdownEl = document.getElementById('countdown');
+    const rescueBtn = document.getElementById('rescue-btn');
+
+    function updateCountdown() {
+      const now = new Date();
+      let diff = targetDate - now;
+      if (diff < 0) diff = 0;
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      if (diff === 0) {
+        rescueBtn.style.display = 'inline-block';
+      } else {
+        rescueBtn.style.display = 'none';
+      }
     }
-    function startPopupTimer() {
-      if (popupTimeout) clearTimeout(popupTimeout);
-      popupTimeout = setTimeout(showHackerPopup, 7000); // 7 segundos para más tensión
-    }
-    // Modifica el comportamiento del botón principal
-    document.getElementById('start-btn').onclick = function() {
-      document.getElementById('mission-text').classList.remove('hidden');
-      document.getElementById('pay-btn').classList.remove('hidden');
-      startPopupTimer();
-    };
-    // Botón de pagar
-    document.getElementById('pay-btn').onclick = function() {
-      const msg = document.getElementById('money-error');
-      msg.textContent = 'NO TIENES EL SUFICIENTE DINERO';
-      msg.classList.remove('hidden');
-      msg.style.opacity = 1;
-      setTimeout(() => {
-        msg.style.opacity = 0;
-      }, 1000);
-      setTimeout(() => {
-        msg.classList.add('hidden');
-      }, 1700);
-    };
-    // Botón de ayuda
-    document.getElementById('help-btn').onclick = function() {
-      window.location.href = 'hacker.html';
-    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+
+    rescueBtn.addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
   </script>
 </body>
 </html>
