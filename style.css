@@ -48,11 +48,14 @@ input {
   background-color: #222;
   color: #eee;
 }
+
+/* SOLO ESTILOS PARA SUDOKU EN GRIS Y SEPARACIÓN 3x3 */
 #sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  gap: 0; /* Sin espacio entre celdas */
-  width: 270px; /* Ajusta el tamaño del Sudoku */
+  gap: 0;
+  width: 400px;
+  margin: 0 auto;
 }
 #sudoku-grid input {
   width: 40px;
@@ -64,15 +67,14 @@ input {
   border: 1px solid #555;
   background-color: #222;
   color: #eee;
+  box-sizing: border-box;
 }
-
 #sudoku-grid input.fixed {
   background-color: #444;
   font-weight: bold;
   color: #ccc;
   border: 1px solid #888;
 }
-
 /* Bordes más gruesos para los bloques 3x3 */
 #sudoku-grid input.top-border {
   border-top: 2px solid black;

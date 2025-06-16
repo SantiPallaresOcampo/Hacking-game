@@ -7,31 +7,77 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="container" style="margin-bottom: 40px;">
     <h2>Objetivo Localizado</h2>
     <p>Hemos localizado el terminal del mafioso.<br>
     Ahora debemos intentar penetrar sus defensas.<br>
     Preparando entorno de ataque...</p>
     <a href="final.html">Continuar</a>
   </div>
-  <div class="maze-container">
+  <div class="maze-container" style="display: flex; flex-direction: column; align-items: center;">
     <h2>Defensas del ordenador del mafioso</h2>
-    <div id="maze"></div>
+    <div class="maze-explanation" style="max-width:600px; color:#0f0; background:rgba(0,0,0,0.7); border:1.5px solid #0f0; border-radius:10px; padding:18px; margin-bottom:18px; font-size:1.1em;">
+      Esta terminal presenta el <b>firewall</b> y la protección del ordenador del mafioso.<br>
+      Usa las <b>flechas del teclado</b> o los <b>botones en pantalla</b> para moverte por el laberinto.<br>
+      Si consigues llegar al final, podrás acceder remotamente a su ordenador.
+    </div>
+    <div id="maze" style="margin: 0 auto;"></div>
+    <div style="margin:18px 0; display:flex; gap:16px; justify-content:center;">
+      <button id="arrow-up" style="width:48px; height:48px; font-size:2em;">↑</button>
+      <button id="arrow-left" style="width:48px; height:48px; font-size:2em;">←</button>
+      <button id="arrow-down" style="width:48px; height:48px; font-size:2em;">↓</button>
+      <button id="arrow-right" style="width:48px; height:48px; font-size:2em;">→</button>
+    </div>
     <div id="maze-success" style="display:none; color:#0f0; font-size:1.2em; margin-top:20px;">¡Has superado el laberinto!</div>
     <button id="mafioso-final-btn" style="display:none; margin-top:20px; padding:12px 28px; font-size:1.1em; border-radius:7px; border:1px solid #0f0; background:#111; color:#0f0; cursor:pointer; font-family:'Courier New', Courier, monospace; transition:background 0.2s;">Acceder al ordenador del mafioso</button>
   </div>
+  <style>
+    body {
+      background: #0a0a0a url('https://www.transparenttextures.com/patterns/cubes.png');
+      background-size: 200px 200px;
+      color: #eee;
+    }
+    .maze-container { margin-top: 40px; }
+    .maze-row { display: flex; }
+    .maze-cell {
+      width: 22px; height: 22px;
+      border: 1px solid #222;
+      background: #222;
+      box-sizing: border-box;
+      transition: background 0.2s;
+    }
+    .maze-wall { background: #111; }
+    .maze-player { background: #0f0; box-shadow: 0 0 8px #0f0, 0 0 2px #fff; }
+    .maze-exit { background: #f00; box-shadow: 0 0 8px #f00; }
+    .maze-explanation { font-family: 'Courier New', Courier, monospace; }
+    #maze { box-shadow: 0 0 30px #0f08; border-radius: 8px; background: rgba(0,0,0,0.7); padding: 10px; }
+    button#arrow-up, button#arrow-down, button#arrow-left, button#arrow-right {
+      background: #111; color: #0f0; border: 1.5px solid #0f0; border-radius: 8px;
+      box-shadow: 0 0 8px #0f08;
+      transition: background 0.2s, color 0.2s;
+    }
+    button#arrow-up:hover, button#arrow-down:hover, button#arrow-left:hover, button#arrow-right:hover {
+      background: #0f0; color: #111;
+    }
+  </style>
   <script>
-    // Laberinto simple (1: pared, 0: camino, S: start, E: exit)
+    // Laberinto grande (1: pared, 0: camino, S: start, E: exit)
     const mazeData = [
-      ['1','1','1','1','1','1','1','1','1','1'],
-      ['1','S','0','0','1','0','0','0','0','1'],
-      ['1','1','1','0','1','0','1','1','0','1'],
-      ['1','0','0','0','0','0','1','0','0','1'],
-      ['1','0','1','1','1','0','1','0','1','1'],
-      ['1','0','1','E','1','0','0','0','0','1'],
-      ['1','0','1','1','1','1','1','1','0','1'],
-      ['1','0','0','0','0','0','0','1','0','1'],
-      ['1','1','1','1','1','1','1','1','1','1']
+      ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+      ['1','S','0','0','1','0','0','0','1','0','1','0','0','0','1','0','0','0','1','0','0','0','1','0','0','0','1','0','0','1'],
+      ['1','1','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','1'],
+      ['1','0','0','0','0','0','1','0','0','0','1','0','0','0','1','0','0','0','1','0','0','0','1','0','0','0','1','0','0','1'],
+      ['1','0','1','1','1','0','1','1','1','0','1','1','1','0','1','1','1','0','1','1','1','0','1','1','1','0','1','1','0','1'],
+      ['1','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','1'],
+      ['1','0','1','0','1','1','1','0','1','1','1','1','1','0','1','0','1','1','1','1','1','0','1','1','1','0','1','0','1','1'],
+      ['1','0','0','0','1','0','0','0','0','0','0','0','1','0','1','0','1','0','0','0','0','0','0','0','1','0','0','0','0','1'],
+      ['1','1','1','0','1','0','1','1','1','1','1','0','1','0','1','0','1','0','1','1','1','1','1','0','1','0','1','1','1','1'],
+      ['1','0','0','0','1','0','0','0','1','0','0','0','1','0','1','0','1','0','0','0','1','0','0','0','1','0','0','0','0','1'],
+      ['1','0','1','1','1','1','1','0','1','1','1','1','1','0','1','0','1','1','1','1','1','0','1','1','1','1','1','1','0','1'],
+      ['1','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','0','0','0','1','0','0','1'],
+      ['1','0','1','0','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','0','1','1','0','1'],
+      ['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','E','1'],
+      ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
     ];
     let playerPos = {x: 1, y: 1};
     function renderMaze() {
@@ -52,6 +98,7 @@
       }
     }
     function canMove(x, y) {
+      if (y < 0 || y >= mazeData.length || x < 0 || x >= mazeData[0].length) return false;
       return mazeData[y][x] !== '1';
     }
     function checkExit() {
@@ -60,29 +107,26 @@
         document.getElementById('mafioso-final-btn').style.display = 'inline-block';
       }
     }
-    document.addEventListener('keydown', function(e) {
-      let moved = false;
-      if (e.key === 'ArrowUp' && canMove(playerPos.x, playerPos.y-1)) {
-        playerPos.y--;
-        moved = true;
-      }
-      if (e.key === 'ArrowDown' && canMove(playerPos.x, playerPos.y+1)) {
-        playerPos.y++;
-        moved = true;
-      }
-      if (e.key === 'ArrowLeft' && canMove(playerPos.x-1, playerPos.y)) {
-        playerPos.x--;
-        moved = true;
-      }
-      if (e.key === 'ArrowRight' && canMove(playerPos.x+1, playerPos.y)) {
-        playerPos.x++;
-        moved = true;
-      }
-      if (moved) {
+    function movePlayer(dx, dy) {
+      const newX = playerPos.x + dx;
+      const newY = playerPos.y + dy;
+      if (canMove(newX, newY)) {
+        playerPos.x = newX;
+        playerPos.y = newY;
         renderMaze();
         checkExit();
       }
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowUp') movePlayer(0, -1);
+      if (e.key === 'ArrowDown') movePlayer(0, 1);
+      if (e.key === 'ArrowLeft') movePlayer(-1, 0);
+      if (e.key === 'ArrowRight') movePlayer(1, 0);
     });
+    document.getElementById('arrow-up').onclick = function() { movePlayer(0, -1); };
+    document.getElementById('arrow-down').onclick = function() { movePlayer(0, 1); };
+    document.getElementById('arrow-left').onclick = function() { movePlayer(-1, 0); };
+    document.getElementById('arrow-right').onclick = function() { movePlayer(1, 0); };
     document.getElementById('mafioso-final-btn').onclick = function() {
       window.location.href = 'final.html';
     };
