@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Misión #001: Infiltración</title>
+
+  <title>?????
+    
+  </title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,12 +17,19 @@
       <iframe width="560" height="315" src="https://www.youtube.com/embed/2yJgwwDcgV8"
         title="YouTube video player" frameborder="0" allowfullscreen></iframe>
     </div>
-    <p class="hidden" id="mission-text">
-      así es, soy yo el gran mafioso!! JAJAJA, tengo a hello kitty y solo podrás recuperarla si pagas la millonada que pido, más te vale darte prisa en conseguir mi dinero, o si no, mejor ni quieras saberlo muajajajaja
-    </p>
     <button id="start-btn">¿¿¿Cómo???</button>
-    <button id="pay-btn" class="hidden"><span style="font-size:1.2em;vertical-align:middle;">💸</span> PAGAR</button>
-    <div id="money-error" class="hidden" style="opacity:1;transition:opacity 1.5s;position:relative;margin-top:20px;font-size:1.2em;color:#e91e63;font-weight:bold;"></div>
+    <span id="pay-btn-wrapper" class="hidden">
+      <button id="pay-btn" style="display:inline-block;vertical-align:middle;"><span style="font-size:1.2em;vertical-align:middle;">💸</span> PAGAR</button>
+      <span id="money-error" class="hidden" style="opacity:1;transition:opacity 1.5s;margin-left:16px;font-size:1.2em;color:#e91e63;font-weight:bold;vertical-align:middle;display:inline-block;"></span>
+    </span>
+    <p class="hidden" id="mission-text" style="background:rgba(34,34,34,0.85);border-radius:12px;padding:22px 18px;margin:30px auto 0 auto;max-width:420px;box-shadow:0 0 18px #000a;font-size:0.9em;line-height:1.6;letter-spacing:0.5px;">
+      <span style="display:block;font-size:1.3em;font-weight:bold;color:#e91e63;margin-bottom:10px;text-align:center;">👤 El Mafioso</span>
+      <span style="color:#fff;display:block;text-align:center;">
+        Así es, soy yo el gran mafioso!! <b>JAJAJA</b>, tengo a Hello Kitty y solo podrás recuperarla si pagas la millonada que pido.<br><br>
+        Más te vale darte prisa en conseguir mi dinero, o si no, mejor ni quieras saberlo...<br>
+        <span style="font-size:1.1em;display:block;margin-top:10px;">muajajajaja</span>
+      </span>
+    </p>
   </div>
   <div id="hacker-popup" class="hidden">
     <div class="hacker-popup-content">
@@ -91,7 +101,8 @@
     // Modifica el comportamiento del botón principal
     document.getElementById('start-btn').onclick = function() {
       document.getElementById('mission-text').classList.remove('hidden');
-      document.getElementById('pay-btn').classList.remove('hidden');
+      document.getElementById('start-btn').style.display = 'none';
+      document.getElementById('pay-btn-wrapper').classList.remove('hidden');
       startPopupTimer();
     };
     // Botón de pagar
