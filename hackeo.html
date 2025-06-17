@@ -7,19 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container" style="margin-bottom: 40px;">
-    <h2>Objetivo Localizado</h2>
-    <p>Hemos localizado el terminal del mafioso.<br>
-    Ahora debemos intentar penetrar sus defensas.<br>
-    Preparando entorno de ataque...</p>
-    <a href="final.html">Continuar</a>
-  </div>
   <div class="maze-container" style="display: flex; flex-direction: column; align-items: center;">
     <h2>Defensas del ordenador del mafioso</h2>
     <div class="maze-explanation" style="max-width:600px; color:#0f0; background:rgba(0,0,0,0.7); border:1.5px solid #0f0; border-radius:10px; padding:18px; margin-bottom:18px; font-size:1.1em;">
       Esta terminal presenta el <b>firewall</b> y la protección del ordenador del mafioso.<br>
-      Usa las <b>flechas del teclado</b> o los <b>botones en pantalla</b> para moverte por el laberinto.<br>
-      Si consigues llegar al final, podrás acceder remotamente a su ordenador.
+      Usa las <b>flechas del teclado</b> o los <b>botones en pantalla</b> para moverte por las defensas del ordenador.<br>
+      Si consigues llegar al final, podrás acceder remotamente.
     </div>
     <div id="maze" style="margin: 0 auto;"></div>
     <div style="margin:18px 0; display:flex; gap:16px; justify-content:center;">
@@ -28,11 +21,11 @@
       <button id="arrow-down" style="width:48px; height:48px; font-size:2em;">↓</button>
       <button id="arrow-right" style="width:48px; height:48px; font-size:2em;">→</button>
     </div>
-    <div id="maze-success" style="display:none; color:#0f0; font-size:1.2em; margin-top:20px;">¡Has superado el laberinto!</div>
+    <div id="maze-success" style="display:none; color:#0f0; font-size:1.2em; margin-top:20px;">¡Has superado el firewall!</div>
     <div id="maze-popup" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:1000; display:flex; align-items:center; justify-content:center;">
       <div style="background:#111; border:2px solid #0f0; border-radius:18px; padding:38px 32px; box-shadow:0 0 40px #0f08; text-align:center; animation: popup-bounce 0.7s cubic-bezier(.68,-0.55,.27,1.55);">
-        <div style="color:#0f0; font-size:1.5em; font-weight:bold; margin-bottom:18px;">¡Has superado el laberinto!</div>
-        <button id="mafioso-final-btn" style="margin-top:10px; padding:14px 32px; font-size:1.2em; border-radius:9px; border:2px solid #0f0; background:#111; color:#0f0; cursor:pointer; font-family:'Courier New', Courier, monospace; transition:background 0.2s;">Acceder al ordenador del mafioso</button>
+        <div style="color:#0f0; font-size:1.5em; font-weight:bold; margin-bottom:18px;">¡Has superado el firewall!</div>
+        <button id="mafioso-desktop-btn" style="margin-top:10px; padding:14px 32px; font-size:1.2em; border-radius:9px; border:2px solid #0f0; background:#111; color:#0f0; cursor:pointer; font-family:'Courier New', Courier, monospace; transition:background 0.2s;">Acceder al ordenador del mafioso</button>
       </div>
     </div>
     <style>
@@ -148,8 +141,8 @@
     document.getElementById('arrow-down').onclick = function() { movePlayer(0, 1); };
     document.getElementById('arrow-left').onclick = function() { movePlayer(-1, 0); };
     document.getElementById('arrow-right').onclick = function() { movePlayer(1, 0); };
-    document.getElementById('mafioso-final-btn').onclick = function() {
-      window.location.href = 'final.html';
+    document.getElementById('mafioso-desktop-btn').onclick = function() {
+      window.location.href = 'desktopMafioso.html';
     };
     renderMaze();
   </script>

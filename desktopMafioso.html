@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escritorio del Mafioso</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: url('kittens desktop.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow: hidden;
+    }
+    .desktop-icon {
+      width: 110px; height: 110px;
+      display: flex; flex-direction: column; align-items: center;
+      margin: 28px 28px 0 28px;
+      cursor: pointer;
+      user-select: none;
+      color: #eee;
+      text-shadow: 0 0 8px #111, 0 0 2px #0f0;
+      font-size: 1.25em;
+    }
+    .desktop-icon img {
+      width: 80px; height: 80px;
+      margin-bottom: 10px;
+    }
+    .desktop {
+      position: absolute; left: 0; top: 0; width: 100vw; height: 100vh;
+      display: flex; flex-direction: row; align-items: flex-start;
+      z-index: 1;
+    }
+    .windows-logo {
+      position: absolute; bottom: 28px; left: 28px;
+      width: 70px; height: 70px;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 12px #0f0);
+    }
+    .folder-window {
+      position: absolute;
+      top: 120px; left: 180px;
+      width: 420px; min-height: 320px;
+      background: #222;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      box-shadow: 0 0 30px #0f08;
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      color: #0f0;
+      font-family: 'Segoe UI', 'Courier New', Courier, monospace;
+      padding: 0 0 18px 0;
+      animation: folder-pop 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .folder-header {
+      background: #111;
+      border-bottom: 1.5px solid #0f0;
+      padding: 10px 18px;
+      font-weight: bold;
+      border-radius: 10px 10px 0 0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .folder-close {
+      color: #f00; cursor: pointer; font-size: 1.2em; font-weight: bold;
+      transition: color 0.2s;
+    }
+    .folder-close:hover { color: #fff; }
+    .folder-content { padding: 0 0 0 0; font-size: 1.1em; }
+    .explorer-bar {
+      background: #191919; border-bottom: 1.5px solid #0f0; padding: 8px 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .explorer-bar input {
+      background: #111; color: #0f0; border: 1.5px solid #0f0; border-radius: 6px; padding: 6px 10px; font-size: 1em; width: 70%;
+    }
+    .explorer-list {
+      padding: 18px 24px; list-style: none; margin: 0;
+    }
+    .explorer-list li {
+      padding: 8px 0; cursor: pointer; color: #0f0; border-bottom: 1px solid #333;
+      font-size: 1.1em;
+      transition: background 0.2s;
+    }
+    .explorer-list li:hover { background: #0f0; color: #111; }
+    .explorer-doc {
+      padding: 18px 24px; color: #fff; background: #181818; border-radius: 0 0 10px 10px; min-height: 120px;
+      font-size: 1.08em; display: none;
+    }
+    .explorer-doc.active { display: block; }
+    .neon-arrow {
+      position: fixed; right: 0; top: 40%; z-index: 100;
+      display: flex; flex-direction: column; align-items: flex-end;
+      filter: drop-shadow(0 0 8px #0f0);
+      cursor: pointer;
+    }
+    .neon-arrow svg {
+      width: 70px; height: 70px;
+      fill: #0f0;
+      animation: arrow-glow 1.2s infinite alternate;
+    }
+    @keyframes arrow-glow {
+      0% { filter: drop-shadow(0 0 8px #0f0); }
+      100% { filter: drop-shadow(0 0 24px #0f0); }
+    }
+    .decrypt-panel {
+      position: fixed; right: -400px; top: 50%; transform: translateY(-50%);
+      background: rgba(10,20,10,0.98);
+      border-left: 2px solid #0f0;
+      border-radius: 18px 0 0 18px;
+      box-shadow: 0 0 30px #0f08;
+      padding: 32px 32px 32px 48px;
+      min-width: 340px;
+      color: #0f0;
+      font-family: 'Courier New', Courier, monospace;
+      z-index: 200;
+      display: flex; flex-direction: column; gap: 18px;
+      transition: right 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .decrypt-panel.open { right: 0; }
+    .decrypt-panel label { font-size: 1.1em; }
+    .decrypt-panel input, .decrypt-panel select {
+      background: #111; color: #0f0; border: 1.5px solid #0f0;
+      border-radius: 6px; padding: 7px 12px; font-size: 1.1em;
+      margin-top: 6px;
+    }
+    .decrypt-panel button {
+      background: #111; color: #0f0; border: 1.5px solid #0f0;
+      border-radius: 8px; padding: 10px 24px; font-size: 1.1em;
+      margin-top: 10px; cursor: pointer;
+      font-family: 'Courier New', Courier, monospace;
+      transition: background 0.2s, color 0.2s;
+    }
+    .decrypt-panel button:hover { background: #0f0; color: #111; }
+    .decrypt-result {
+      margin-top: 10px; color: #fff; font-size: 1.1em;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop">
+    <div class="desktop-icon" onclick="openFolder('folder-encriptacion')">
+      <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="Carpeta Encriptación">
+      <span>Encriptación</span>
+    </div>
+    <div class="desktop-icon" onclick="openFolder('folder-documentos')">
+      <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="Carpeta Documentos">
+      <span>Documentos</span>
+    </div>
+    <img class="windows-logo" src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Windows logo">
+  </div>
+  <!-- Carpeta Encriptación -->
+  <div id="folder-encriptacion" class="folder-window">
+    <div class="folder-header">Encriptación <span class="folder-close" onclick="closeFolder('folder-encriptacion')">×</span></div>
+    <div class="explorer-bar"><input type="text" value="C:/Mafioso/Encriptación" readonly></div>
+    <ul class="explorer-list">
+      <li onclick="openDoc('encriptacion-metodo')">metodo.txt</li>
+    </ul>
+    <div id="encriptacion-metodo" class="explorer-doc">
+      <b>Método de encriptación:</b><br>
+      César 3<br><br>
+      <i>Este método desplaza cada letra 3 posiciones en el alfabeto.</i>
+    </div>
+  </div>
+  <!-- Carpeta Documentos -->
+  <div id="folder-documentos" class="folder-window">
+    <div class="folder-header">Documentos <span class="folder-close" onclick="closeFolder('folder-documentos')">×</span></div>
+    <div class="explorer-bar"><input type="text" value="C:/Mafioso/Documentos" readonly></div>
+    <ul class="explorer-list">
+      <li onclick="openDoc('doc-contraseñas')">contraseñas.txt</li>
+      <li onclick="openDoc('doc-plan')">plan_mafioso.docx</li>
+      <li onclick="openDoc('doc-pagos')">pagos.xlsx</li>
+    </ul>
+    <div id="doc-contraseñas" class="explorer-doc">contraseña: 1234<br>admin: admin2025</div>
+    <div id="doc-plan" class="explorer-doc">Plan secreto: ...<br>(contenido ficticio)</div>
+    <div id="doc-pagos" class="explorer-doc">Pagos:<br>- 10.000€ a X<br>- 5.000€ a Y</div>
+  </div>
+  <!-- Flecha neon desplegable -->
+  <div class="neon-arrow" onclick="toggleDecryptPanel()">
+    <svg viewBox="0 0 60 60"><polygon points="10,30 50,10 50,25 55,25 55,35 50,35 50,50"/></svg>
+  </div>
+  <div class="decrypt-panel" id="decrypt-panel">
+    <label for="decrypt-text">Texto por desencriptar:</label>
+    <input type="text" id="decrypt-text" value="Krod Nlwwb!" autocomplete="off">
+    <label for="decrypt-method">Tipo de encriptación:</label>
+    <input type="text" id="decrypt-method" value="Cesar 3" autocomplete="off">
+    <button onclick="decryptText()">Desencriptar</button>
+    <div class="decrypt-result" id="decrypt-result"></div>
+  </div>
+  <script>
+    function openFolder(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    function closeFolder(id) {
+      document.getElementById(id).style.display = 'none';
+      // Ocultar cualquier documento abierto
+      var docs = document.querySelectorAll('#'+id+' .explorer-doc');
+      docs.forEach(function(doc){ doc.classList.remove('active'); });
+    }
+    function openDoc(docId) {
+      // Ocultar todos los documentos de la ventana actual
+      var allDocs = document.querySelectorAll('.explorer-doc');
+      allDocs.forEach(function(doc){ doc.classList.remove('active'); });
+      document.getElementById(docId).classList.add('active');
+    }
+    function decryptText() {
+      const text = document.getElementById('decrypt-text').value;
+      const method = document.getElementById('decrypt-method').value.trim().toLowerCase();
+      let result = '';
+      if (method.includes('cesar') || method.includes('césar')) {
+        // Desencriptar César 3
+        result = text.replace(/[a-zA-Z]/g, function(c) {
+          let base = c <= 'Z' ? 65 : 97;
+          return String.fromCharCode((c.charCodeAt(0) - base - 3 + 26) % 26 + base);
+        });
+      } else {
+        result = 'Método de encriptación no soportado.';
+      }
+      document.getElementById('decrypt-result').textContent = result;
+    }
+    // Panel lateral desplegable
+    function toggleDecryptPanel() {
+      var panel = document.getElementById('decrypt-panel');
+      panel.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
