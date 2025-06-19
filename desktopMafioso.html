@@ -42,54 +42,60 @@
     .folder-window {
       position: absolute;
       top: 120px; left: 180px;
-      width: 420px; min-height: 320px;
-      background: #222;
-      border: 2px solid #0f0;
+      width: 480px; min-height: 340px;
+      background: #fff;
+      border: 2px solid #444;
       border-radius: 10px;
-      box-shadow: 0 0 30px #0f08;
+      box-shadow: 0 0 30px #8882;
       z-index: 10;
       display: none;
       flex-direction: column;
-      color: #0f0;
+      color: #111;
       font-family: 'Segoe UI', 'Courier New', Courier, monospace;
       padding: 0 0 18px 0;
       animation: folder-pop 0.5s cubic-bezier(.68,-0.55,.27,1.55);
     }
     .folder-header {
-      background: #111;
-      border-bottom: 1.5px solid #0f0;
+      background: #f7f7f7;
+      border-bottom: 1.5px solid #444;
       padding: 10px 18px;
       font-weight: bold;
       border-radius: 10px 10px 0 0;
       display: flex; justify-content: space-between; align-items: center;
+      color: #111;
     }
     .folder-close {
       color: #f00; cursor: pointer; font-size: 1.2em; font-weight: bold;
       transition: color 0.2s;
     }
-    .folder-close:hover { color: #fff; }
+    .folder-close:hover { color: #111; }
     .folder-content { padding: 0 0 0 0; font-size: 1.1em; }
     .explorer-bar {
-      background: #191919; border-bottom: 1.5px solid #0f0; padding: 8px 16px; display: flex; align-items: center; gap: 12px;
+      background: #f7f7f7; border-bottom: 1.5px solid #444; padding: 8px 16px; display: flex; align-items: center; gap: 12px;
     }
     .explorer-bar input {
-      background: #111; color: #0f0; border: 1.5px solid #0f0; border-radius: 6px; padding: 6px 10px; font-size: 1em; width: 70%;
+      background: #fff; color: #111; border: 1.5px solid #bbb; border-radius: 6px; padding: 6px 10px; font-size: 1em; width: 70%;
     }
     .explorer-list {
       padding: 18px 24px; list-style: none; margin: 0;
+      background: #fff;
+      border-bottom: 1.5px solid #444;
     }
     .explorer-list li {
-      padding: 8px 0; cursor: pointer; color: #0f0; border-bottom: 1px solid #333;
+      padding: 8px 0; cursor: pointer; color: #111; border-bottom: 1px solid #eee;
       font-size: 1.1em;
       transition: background 0.2s;
+      background: #fff;
     }
-    .explorer-list li:hover { background: #0f0; color: #111; }
+    .explorer-list li:hover { background: #e0e0e0; color: #111; }
     .explorer-doc {
-      padding: 18px 24px; color: #fff; background: #181818; border-radius: 0 0 10px 10px; min-height: 120px;
+      padding: 18px 24px; color: #111; background: #fff; border-radius: 0 0 10px 10px; min-height: 120px;
       font-size: 1.08em; display: none;
+      border: 1.5px solid #444;
+      border-top: none;
     }
     .explorer-doc.active { display: block; }
-    .neon-arrow {
+    /* .neon-arrow {
       position: fixed; right: 0; top: 40%; z-index: 100;
       display: flex; flex-direction: column; align-items: flex-end;
       filter: drop-shadow(0 0 8px #0f0);
@@ -103,8 +109,8 @@
     @keyframes arrow-glow {
       0% { filter: drop-shadow(0 0 8px #0f0); }
       100% { filter: drop-shadow(0 0 24px #0f0); }
-    }
-    .decrypt-panel {
+    } */
+    /* .decrypt-panel {
       position: fixed; right: -400px; top: 50%; transform: translateY(-50%);
       background: rgba(10,20,10,0.98);
       border-left: 2px solid #0f0;
@@ -117,8 +123,8 @@
       z-index: 200;
       display: flex; flex-direction: column; gap: 18px;
       transition: right 0.5s cubic-bezier(.68,-0.55,.27,1.55);
-    }
-    .decrypt-panel.open { right: 0; }
+    } */
+    /* .decrypt-panel.open { right: 0; }
     .decrypt-panel label { font-size: 1.1em; }
     .decrypt-panel input, .decrypt-panel select {
       background: #111; color: #0f0; border: 1.5px solid #0f0;
@@ -136,7 +142,78 @@
     .decrypt-result {
       margin-top: 10px; color: #fff; font-size: 1.1em;
       word-break: break-all;
+    } */
+    /* Nuevo menú lateral tipo Windows */
+    .side-menu {
+      position: fixed;
+      top: 0; right: -420px;
+      width: 420px; height: 100vh;
+      background: #fff;
+      border-left: 3px solid #0f0;
+      box-shadow: -4px 0 30px #0f08;
+      z-index: 300;
+      display: flex; flex-direction: column;
+      transition: right 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+      color: #111;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
+    .side-menu.open { right: 0; }
+    .side-menu-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 28px 12px 28px;
+      font-size: 1.4em; font-weight: bold;
+      border-bottom: 1.5px solid #0f0;
+      background: #f7f7f7;
+    }
+    .side-menu-close {
+      font-size: 1.5em; color: #0f0; cursor: pointer; font-weight: bold; transition: color 0.2s;
+    }
+    .side-menu-close:hover { color: #111; }
+    .side-menu-content {
+      flex: 1;
+      padding: 28px 32px 32px 32px;
+      display: flex; flex-direction: column; gap: 24px;
+      background: #fff;
+    }
+    .side-menu label {
+      font-size: 1.1em; margin-bottom: 6px; color: #222;
+    }
+    .side-menu input, .side-menu textarea {
+      width: 100%;
+      background: #f7f7f7;
+      color: #111;
+      border: 2px solid #bbb;
+      border-radius: 8px;
+      padding: 14px 3px;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      resize: vertical;
+    }
+    .side-menu button {
+      background: #0f0; color: #111; border: none;
+      border-radius: 8px; padding: 14px 32px; font-size: 1.2em;
+      margin-top: 10px; cursor: pointer;
+      font-family: 'Segoe UI', 'Courier New', Courier, monospace;
+      transition: background 0.2s, color 0.2s;
+      font-weight: bold;
+      box-shadow: 0 0 10px #0f08;
+    }
+    .side-menu button:hover { background: #111; color: #0f0; }
+    .side-menu .reminder {
+      background: #e9ffe9; color: #0a0; border: 1.5px solid #0f0; border-radius: 8px; padding: 12px 16px; font-size: 1.08em;
+    }
+    .side-menu-toggle {
+      position: fixed; right: 0; top: 42%; z-index: 350;
+      background: #0f0; color: #111; border-radius: 8px 0 0 8px;
+      box-shadow: 0 0 12px #0f08;
+      padding: 10px 8px 10px 12px;
+      font-size: 2.2em;
+      cursor: pointer;
+      border: none;
+      border-left: 2px solid #0f0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .side-menu-toggle:hover { background: #111; color: #0f0; }
   </style>
 </head>
 <body>
@@ -161,7 +238,7 @@
     <div id="encriptacion-metodo" class="explorer-doc">
       <b>Método de encriptación:</b><br>
       César 3<br><br>
-      <i>Este método desplaza cada letra 3 posiciones en el alfabeto.</i>
+      <i>Este método desplaza cada letra 3 posiciones en el alfabeto. Perfecto para mafiosos que quieren enviar mensajes de contenido sensible sin ser descubiertos.</i>
     </div>
   </div>
   <!-- Carpeta Documentos -->
@@ -173,12 +250,21 @@
       <li onclick="openDoc('doc-plan')">plan_mafioso.docx</li>
       <li onclick="openDoc('doc-pagos')">pagos.xlsx</li>
     </ul>
-    <div id="doc-contraseñas" class="explorer-doc">contraseña: 1234<br>admin: admin2025</div>
-    <div id="doc-plan" class="explorer-doc">Plan secreto: ...<br>(contenido ficticio)</div>
-    <div id="doc-pagos" class="explorer-doc">Pagos:<br>- 10.000€ a X<br>- 5.000€ a Y</div>
+    <div id="doc-contraseñas" class="explorer-doc">contraseña: losGatetesMolan1!<br>admin: mafiosomolongo23</div>
+    <div id="doc-plan" class="explorer-doc">
+      <b><i>Plan secreto: Dinero fácil con Hello Kitty</i></b><br>
+      Primero de todo, yo gran mafioso, que excepto aquella vez que me pegaron en las bolas, soy un mastodonte, un tiburón pensante, por lo que con mis capacidades cognitivas superiores voy a conseguir dinero fácil para comprarme ese traje al que le tengo tantas ganas. <br>
+      <br>
+      A lo que iba, primero he de hacer el plan del secuestro, contrato a mi amigo billy para que rapte a Hello Kitty mientras va a comprar el pan.<br>
+      <br>
+      Segundo, envío a Ash la carta super secreta de manera que nunca sabra de dónde le ha llegado. Además conozco muy bien a ash y sé que pagará instantaneamente y mejor enviarle la carta de blackmailing a su novio porque si no, ash es demasiado listo y me trackeará, no me puedo arriesgar a eso.<br>
+      <br>
+      Como último paso, me lleno los bolsillos de dinero y me compro mi fur.. mi traje, es para trabajo, sí, para trabajo... ejem ejem.
+    </div>
+    <div id="doc-pagos" class="explorer-doc">Pagos:<br>- 10.000€ a furryland-custom-fursuits.com<br>- 5.000€ a billy <br> - 8.000€ a James para la creación de la web (es un crack)</div>
   </div>
   <!-- Flecha neon desplegable -->
-  <div class="neon-arrow" onclick="toggleDecryptPanel()">
+  <!-- <div class="neon-arrow" onclick="toggleDecryptPanel()">
     <svg viewBox="0 0 60 60"><polygon points="10,30 50,10 50,25 55,25 55,35 50,35 50,50"/></svg>
   </div>
   <div class="decrypt-panel" id="decrypt-panel">
@@ -188,6 +274,23 @@
     <input type="text" id="decrypt-method" value="Cesar 3" autocomplete="off">
     <button onclick="decryptText()">Desencriptar</button>
     <div class="decrypt-result" id="decrypt-result"></div>
+  </div> -->
+  <button class="side-menu-toggle" id="sideMenuToggle" onclick="toggleSideMenu()">☰</button>
+  <div class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      Herramientas de desencriptado
+      <span class="side-menu-close" onclick="toggleSideMenu()">×</span>
+    </div>
+    <div class="side-menu-content">
+      <div class="reminder"><b>Recordatorio:</b> Texto encriptado interceptado en el MRC:<br><span id="reminder-cipher">sdjlqd zhe yhu ixuurv oljhurv gh ursd</span></div>
+      <label for="decrypt-text">Texto por desencriptar:</label>
+      <textarea id="decrypt-text" rows="3">texto encriptado aquí</textarea>
+      <label for="decrypt-method">Tipo de encriptación:</label>
+      <input type="text" id="decrypt-method" value="tipo_de_encriptación número" autocomplete="off">
+      <button onclick="decryptText()">Desencriptar</button>
+      <div class="decrypt-result" id="decrypt-result"></div>
+      <button id="chantagear-btn" style="display:none; margin-top:18px; background:#0f0; color:#111; font-weight:bold; font-size:1.1em; border-radius:8px; padding:12px 28px; border:none; cursor:pointer;">Chantagear al mafioso</button>
+    </div>
   </div>
   <script>
     function openFolder(id) {
@@ -210,21 +313,43 @@
       const method = document.getElementById('decrypt-method').value.trim().toLowerCase();
       let result = '';
       if (method.includes('cesar') || method.includes('césar')) {
-        // Desencriptar César 3
-        result = text.replace(/[a-zA-Z]/g, function(c) {
-          let base = c <= 'Z' ? 65 : 97;
-          return String.fromCharCode((c.charCodeAt(0) - base - 3 + 26) % 26 + base);
+        result = text.replace(/[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]/g, function(c) {
+          // Soporte para letras con tilde y ñ
+          const abc = 'abcdefghijklmnopqrstuvwxyzáéíóúñü';
+          const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÑÜ';
+          if (abc.includes(c)) {
+            let idx = abc.indexOf(c);
+            return abc[(idx - 3 + abc.length) % abc.length];
+          } else if (ABC.includes(c)) {
+            let idx = ABC.indexOf(c);
+            return ABC[(idx - 3 + ABC.length) % ABC.length];
+          } else {
+            return c;
+          }
         });
+        document.getElementById('chantagear-btn').style.display = 'block';
       } else {
         result = 'Método de encriptación no soportado.';
+        document.getElementById('chantagear-btn').style.display = 'none';
       }
       document.getElementById('decrypt-result').textContent = result;
     }
+    document.getElementById('chantagear-btn').onclick = function() {
+      window.location.href = 'whatsappMafioso.html';
+    };
     // Panel lateral desplegable
     function toggleDecryptPanel() {
       var panel = document.getElementById('decrypt-panel');
       panel.classList.toggle('open');
     }
+    function toggleSideMenu() {
+      var menu = document.getElementById('sideMenu');
+      menu.classList.toggle('open');
+    }
+    // Al cargar, asegurar que el menú está cerrado
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('sideMenu').classList.remove('open');
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Mafioso</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e5ddd5 50%, #f3e7e9 100%);
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .wa-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .wa-sidebar {
+      width: 340px;
+      background: #fff;
+      border-right: 2px solid #bbb;
+      padding: 0 0 24px 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      font-size: 1.1em;
+      color: #222;
+      z-index: 2;
+      box-shadow: 2px 0 12px #0001;
+      min-height: 200px;
+    }
+    .wa-info-dropdown {
+      width: 92%;
+      margin: 18px auto 0 auto;
+      border-bottom: 1.5px solid #eee;
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .wa-info-header {
+      width: 100%;
+      background: #25d366;
+      color: #fff;
+      padding: 18px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 0;
+    }
+    .wa-info-content {
+      width: 100%;
+      background: #f7f7f7;
+      color: #222;
+      padding: 18px 24px;
+      font-size: 1em;
+      display: none;
+      border-radius: 0 0 16px 16px;
+    }
+    .wa-info-content.open {
+      display: block;
+    }
+    .wa-chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: url('whatsapp fondo pantalla.jpg') center center/cover no-repeat;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+    .wa-chat {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      background: rgba(255,255,255,0.7);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #0001;
+      min-height: 320px;
+      border: 1.5px solid #e0e0e0;
+      justify-content: flex-start;
+      position: relative;
+      overflow-y: auto;
+      height: 520px;
+    }
+    .wa-chat-header {
+      width: 100%;
+      background: #25d366;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.2em;
+      padding: 18px 0 18px 32px;
+      border-radius: 18px 18px 0 0;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px #0001;
+      border-bottom: 1.5px solid #e0e0e0;
+      box-sizing: border-box;
+      max-width: 600px;
+      margin: 0 auto;
+      margin-top: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    .wa-chat > .wa-chat-header + * {
+      margin-top: 56px !important;
+    }
+    .wa-msg {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 80%;
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+    .wa-msg.hacker {
+      align-items: flex-end;
+      margin-left: auto;
+      margin-right: 24px;
+    }
+    .wa-bubble {
+      background: #fff;
+      color: #222;
+      border-radius: 8px 8px 0 8px;
+      padding: 12px 18px;
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px #0001;
+      margin-bottom: 2px;
+      max-width: 100%;
+      word-break: break-word;
+      animation: wa-pop 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .wa-msg.hacker .wa-bubble {
+      background: #dcf8c6;
+      color: #222;
+      border-radius: 8px 8px 8px 0;
+    }
+    @keyframes wa-pop {
+      0% { transform: scale(0.7) translateY(30px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .wa-btn {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      margin: 24px auto 0 auto;
+      cursor: pointer;
+      display: block;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px #0002;
+      position: relative;
+      top: 0;
+    }
+    .wa-btn:hover {
+      background: #128c7e;
+    }
+    .wa-footer {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .wa-sidebar { display: none; }
+      .wa-chat-area { flex: 1; }
+      .wa-chat { margin: 0; }
+    }
+    .wa-typing {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #888;
+      font-style: italic;
+      margin-left: 32px;
+      margin-bottom: 8px;
+      font-size: 1em;
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .wa-img-msg {
+      max-width: 220px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #0002;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      border: 1.5px solid #bbb;
+    }
+  </style>
+</head>
+<body>
+  <div class="wa-container">
+    <div class="wa-sidebar">
+      <div class="wa-info-dropdown">
+        <button class="wa-info-header" id="waInfoBtn">
+          Información <span id="waInfoArrow">▼</span>
+        </button>
+        <div class="wa-info-content" id="waInfoContent">
+          <b>El hacker ético ha <br>conseguido <br>su número y te ha abierto la conversación en WhatsApp.</b>
+          <br><br>
+          Ahora puedes iniciar el chantaje <br>final.
+        </div>
+      </div>
+    </div>
+    <div class="wa-chat-area">
+      <div class="wa-chat" id="wa-chat">
+        <div class="wa-chat-header">mafioso</div>
+        <div class="wa-msg hacker">
+          <div class="wa-bubble">te hemos pillado</div>
+        </div>
+        <div class="wa-msg mafioso">
+          <div class="wa-bubble">¿cómo? ¿quién eres?</div>
+        </div>
+      </div>
+      <button class="wa-btn" id="chantajearBtn">Quien soy no es importante, lo que es importante es que te vamos a chantajear</button>
+      <button class="wa-btn" id="cosasBtn" style="display:none;">conozco cosas sobre tí y tu tienes cosas que quiero de vuelta...</button>
+    </div>
+  </div>
+  <script>
+    // Desplegable informativo
+    const waInfoBtn = document.getElementById('waInfoBtn');
+    const waInfoContent = document.getElementById('waInfoContent');
+    const waInfoArrow = document.getElementById('waInfoArrow');
+    waInfoBtn.addEventListener('click', function() {
+      waInfoContent.classList.toggle('open');
+      waInfoArrow.textContent = waInfoContent.classList.contains('open') ? '▲' : '▼';
+    });
+    // Chat lógica
+    const chat = document.getElementById('wa-chat');
+    const chantajearBtn = document.getElementById('chantajearBtn');
+    const cosasBtn = document.getElementById('cosasBtn');
+    function scrollChat() {
+      chat.scrollTop = chat.scrollHeight;
+    }
+    function addMsg(sender, text, isImg) {
+      const msg = document.createElement('div');
+      msg.className = 'wa-msg ' + sender;
+      if (isImg) {
+        msg.innerHTML = `<img src="recibo ficticio correos hello kitty.png" class="wa-img-msg" alt="Recibo Hello Kitty">`;
+      } else {
+        msg.innerHTML = `<div class="wa-bubble">${text}</div>`;
+      }
+      chat.appendChild(msg);
+      scrollChat();
+    }
+    function addTyping(sender) {
+      const typing = document.createElement('div');
+      typing.className = 'wa-typing';
+      typing.id = 'typing-indicator';
+      typing.innerHTML = sender === 'mafioso' ? 'mafioso está escribiendo...' : 'tú estás escribiendo...';
+      chat.appendChild(typing);
+      scrollChat();
+    }
+    function removeTyping() {
+      const typing = document.getElementById('typing-indicator');
+      if (typing) typing.remove();
+    }
+    chantajearBtn.addEventListener('click', function() {
+      addMsg('hacker', 'Quien soy no es importante, lo que es importante es que te vamos a chantajear');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'a mí me vas a chantajear? tu no sabes con quien te estas metiendo');
+        setTimeout(() => {
+          cosasBtn.style.display = 'block';
+        }, 2000);
+      }, 2000);
+    });
+    cosasBtn.addEventListener('click', function() {
+      addMsg('hacker', 'conozco cosas sobre tí y tu tienes cosas que quiero de vuelta...');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'vaya mentira, todos dicen lo mismo y a la que se enteran de quien soy se cagan encima, es solo llamar a mi amigo y te hará saber la diferencia entre tu y yo.');
+        setTimeout(() => {
+          addMsg('hacker', 'Lo que quieras, puedes llamar a billy si quieres, que ya lo conozco...');
+          setTimeout(() => {
+            addMsg('mafioso', '...');
+            setTimeout(() => {
+              addMsg('hacker', 'no tengo todo el día, iré al grano, se que recientemente has hecho busquedas sospechosas respecto a furros y poca cantidad de ropa...');
+              setTimeout(() => {
+                addMsg('mafioso', '!!!! no puede ser, eso es mentira. además tengo una vpn que me protege, estas mintiendo, se te da muy mal mentir!!!');
+                setTimeout(() => {
+                  addMsg('hacker', 'te he hackeado el ordenador e interceptado busquedas, se que por ejemplo tu contraseña es: losGatetesMolan1!');
+                  setTimeout(() => {
+                    addMsg('mafioso', 'de acuerdo de acuerdo, no hace falta ponerse así, a ver que quieres y me lo pienso, que hoy estoy de buen humor');
+                    setTimeout(() => {
+                      addMsg('hacker', 'idealmente no quiero nada de tí... pero tienes a hello kitty, devuelvela! o sufriras las consecuencias');
+                      setTimeout(() => {
+                        addMsg('mafioso', 'Jod- eres tú, ya le decía a billy que esto no funcionaria, ya tenía razón yo, ya la tenía... No es tan facil devolverla , tengo mis problemas');
+                        setTimeout(() => {
+                          addMsg('hacker', 'eso a mi no me importa, devuelvela o te doxeo');
+                          setTimeout(() => {
+                            addMsg('mafioso', 'vale vale, la devolveré, pero tardará unos días...');
+                            setTimeout(() => {
+                              addMsg('hacker', 'quiero pruebas');
+                              setTimeout(() => {
+                                addMsg('mafioso', 'voy voy');
+                                setTimeout(() => {
+                                  addTyping('mafioso');
+                                  setTimeout(() => {
+                                    removeTyping();
+                                    addMsg('mafioso', '', true);
+                                  }, 20000);
+                                }, 1000);
+                              }, 1200);
+                            }, 1200);
+                          }, 1200);
+                        }, 1200);
+                      }, 1200);
+                    }, 1200);
+                  }, 1200);
+                }, 1200);
+              }, 1200);
+            }, 1200);
+          }, 1200);
+        }, 2000);
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
