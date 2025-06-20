@@ -116,10 +116,11 @@
       max-width: 600px;
       margin: 0 auto;
       margin-top: 0;
-      position: absolute;
+      position: sticky;
       top: 0;
       left: 0;
       right: 0;
+      z-index: 10;
     }
     .wa-chat > .wa-chat-header + * {
       margin-top: 56px !important;
@@ -207,6 +208,44 @@
       margin-bottom: 8px;
       border: 1.5px solid #bbb;
     }
+    #kittyBtn {
+      width: auto;
+      min-width: 180px;
+      max-width: 90vw;
+      font-size: 0.9em;
+      padding: 4px 14px;
+      border-radius: 6px;
+      background: linear-gradient(270deg, #ff0080, #7928ca, #00cfff, #00ff94, #ffe600, #ff0080);
+      background-size: 1200% 1200%;
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 8px #0002;
+      font-weight: bold;
+      transition: background 0.2s;
+      display: block;
+      cursor: pointer;
+      height: 38px;
+      line-height: 22px;
+      animation: rainbow-move 6s linear infinite;
+      margin: 32px auto 0 auto;
+      position: static;
+    }
+    @keyframes rainbow-move {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
+    }
+    }
+    #kittyBtn:hover {
+      background: #128c7e;
+    }
+    .confetti {
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      0%{transform:translateY(0);}
+      100%{transform:translateY(110vh);}
+    }
   </style>
 </head>
 <body>
@@ -226,15 +265,17 @@
     <div class="wa-chat-area">
       <div class="wa-chat" id="wa-chat">
         <div class="wa-chat-header">mafioso</div>
-        <div class="wa-msg hacker">
-          <div class="wa-bubble">te hemos pillado</div>
-        </div>
-        <div class="wa-msg mafioso">
-          <div class="wa-bubble">¿cómo? ¿quién eres?</div>
-        </div>
+        <!-- Mensajes se insertan dinámicamente -->
       </div>
-      <button class="wa-btn" id="chantajearBtn">Quien soy no es importante, lo que es importante es que te vamos a chantajear</button>
+      <button class="wa-btn" id="chantajearBtn" style="display:none;">Quien soy no es importante, lo que es importante es que te vamos a chantajear</button>
       <button class="wa-btn" id="cosasBtn" style="display:none;">conozco cosas sobre tí y tu tienes cosas que quiero de vuelta...</button>
+      <button class="wa-btn" id="billyBtn" style="display:none;">Lo que quieras, puedes llamar a billy si quieres, que ya lo conozco...</button>
+      <button class="wa-btn" id="granoBtn" style="display:none;">no tengo todo el día, iré al grano, se que recientemente has hecho busquedas sospechosas respecto a furros y poca cantidad de ropa...</button>
+      <button class="wa-btn" id="pwBtn" style="display:none;">te he hackeado el ordenador e interceptado busquedas, se que por ejemplo tu contraseña es: losGatetesMolan1!</button>
+      <button class="wa-btn" id="nadaBtn" style="display:none;">idealmente no quiero nada de tí... pero tienes a hello kitty, devuelvela! o sufriras las consecuencias</button>
+      <button class="wa-btn" id="doxBtn" style="display:none;">eso a mi no me importa, devuelvela o te doxeo</button>
+      <button class="wa-btn" id="pruebasBtn" style="display:none;">quiero pruebas</button>
+      <button class="wa-btn" id="kittyBtn" style="display:none; margin: 32px auto 0 auto; position: static;">Hello kitty recuperada!!!!</button>
     </div>
   </div>
   <script>
@@ -250,6 +291,13 @@
     const chat = document.getElementById('wa-chat');
     const chantajearBtn = document.getElementById('chantajearBtn');
     const cosasBtn = document.getElementById('cosasBtn');
+    const billyBtn = document.getElementById('billyBtn');
+    const granoBtn = document.getElementById('granoBtn');
+    const pwBtn = document.getElementById('pwBtn');
+    const nadaBtn = document.getElementById('nadaBtn');
+    const doxBtn = document.getElementById('doxBtn');
+    const pruebasBtn = document.getElementById('pruebasBtn');
+    const kittyBtn = document.getElementById('kittyBtn');
     function scrollChat() {
       chat.scrollTop = chat.scrollHeight;
     }
@@ -276,6 +324,18 @@
       const typing = document.getElementById('typing-indicator');
       if (typing) typing.remove();
     }
+    // Secuencia de mensajes y botones
+    function startChat() {
+      setTimeout(() => {
+        addMsg('hacker', 'te hemos pillado');
+        setTimeout(() => {
+          addMsg('mafioso', '¿cómo? ¿quién eres?');
+          setTimeout(() => {
+            chantajearBtn.style.display = 'block';
+          }, 1200);
+        }, 2000);
+      }, 2000);
+    }
     chantajearBtn.addEventListener('click', function() {
       addMsg('hacker', 'Quien soy no es importante, lo que es importante es que te vamos a chantajear');
       this.style.display = 'none';
@@ -292,50 +352,108 @@
       setTimeout(() => {
         addMsg('mafioso', 'vaya mentira, todos dicen lo mismo y a la que se enteran de quien soy se cagan encima, es solo llamar a mi amigo y te hará saber la diferencia entre tu y yo.');
         setTimeout(() => {
-          addMsg('hacker', 'Lo que quieras, puedes llamar a billy si quieres, que ya lo conozco...');
-          setTimeout(() => {
-            addMsg('mafioso', '...');
-            setTimeout(() => {
-              addMsg('hacker', 'no tengo todo el día, iré al grano, se que recientemente has hecho busquedas sospechosas respecto a furros y poca cantidad de ropa...');
-              setTimeout(() => {
-                addMsg('mafioso', '!!!! no puede ser, eso es mentira. además tengo una vpn que me protege, estas mintiendo, se te da muy mal mentir!!!');
-                setTimeout(() => {
-                  addMsg('hacker', 'te he hackeado el ordenador e interceptado busquedas, se que por ejemplo tu contraseña es: losGatetesMolan1!');
-                  setTimeout(() => {
-                    addMsg('mafioso', 'de acuerdo de acuerdo, no hace falta ponerse así, a ver que quieres y me lo pienso, que hoy estoy de buen humor');
-                    setTimeout(() => {
-                      addMsg('hacker', 'idealmente no quiero nada de tí... pero tienes a hello kitty, devuelvela! o sufriras las consecuencias');
-                      setTimeout(() => {
-                        addMsg('mafioso', 'Jod- eres tú, ya le decía a billy que esto no funcionaria, ya tenía razón yo, ya la tenía... No es tan facil devolverla , tengo mis problemas');
-                        setTimeout(() => {
-                          addMsg('hacker', 'eso a mi no me importa, devuelvela o te doxeo');
-                          setTimeout(() => {
-                            addMsg('mafioso', 'vale vale, la devolveré, pero tardará unos días...');
-                            setTimeout(() => {
-                              addMsg('hacker', 'quiero pruebas');
-                              setTimeout(() => {
-                                addMsg('mafioso', 'voy voy');
-                                setTimeout(() => {
-                                  addTyping('mafioso');
-                                  setTimeout(() => {
-                                    removeTyping();
-                                    addMsg('mafioso', '', true);
-                                  }, 20000);
-                                }, 1000);
-                              }, 1200);
-                            }, 1200);
-                          }, 1200);
-                        }, 1200);
-                      }, 1200);
-                    }, 1200);
-                  }, 1200);
-                }, 1200);
-              }, 1200);
-            }, 1200);
-          }, 1200);
+          billyBtn.style.display = 'block';
         }, 2000);
       }, 2000);
     });
+    billyBtn.addEventListener('click', function() {
+      addMsg('hacker', 'Lo que quieras, puedes llamar a billy si quieres, que ya lo conozco...');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', '...');
+        setTimeout(() => {
+          granoBtn.style.display = 'block';
+        }, 1200);
+      }, 2000);
+    });
+    granoBtn.addEventListener('click', function() {
+      addMsg('hacker', 'no tengo todo el día, iré al grano, se que recientemente has hecho busquedas sospechosas respecto a furros y poca cantidad de ropa...');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', '!!!! no puede ser, eso es mentira. además tengo una vpn que me protege, estas mintiendo, se te da muy mal mentir!!!');
+        setTimeout(() => {
+          pwBtn.style.display = 'block';
+        }, 2000);
+      }, 2000);
+    });
+    pwBtn.addEventListener('click', function() {
+      addMsg('hacker', 'te he hackeado el ordenador e interceptado busquedas, se que por ejemplo tu contraseña es: losGatetesMolan1!');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'de acuerdo de acuerdo, no hace falta ponerse así, a ver que quieres y me lo pienso, que hoy estoy de buen humor');
+        setTimeout(() => {
+          nadaBtn.style.display = 'block';
+        }, 2000);
+      }, 2000);
+    });
+    nadaBtn.addEventListener('click', function() {
+      addMsg('hacker', 'idealmente no quiero nada de tí... pero tienes a hello kitty, devuelvela! o sufriras las consecuencias');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'Jod- eres tú, ya le decía a billy que esto no funcionaria, ya tenía razón yo, ya la tenía... No es tan facil devolverla , tengo mis problemas');
+        setTimeout(() => {
+          doxBtn.style.display = 'block';
+        }, 2000);
+      }, 2000);
+    });
+    doxBtn.addEventListener('click', function() {
+      addMsg('hacker', 'eso a mi no me importa, devuelvela o te doxeo');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'vale vale, la devolveré, pero tardará unos días...');
+        setTimeout(() => {
+          pruebasBtn.style.display = 'block';
+        }, 2000);
+      }, 2000);
+    });
+    pruebasBtn.addEventListener('click', function() {
+      addMsg('hacker', 'quiero pruebas');
+      this.style.display = 'none';
+      setTimeout(() => {
+        addMsg('mafioso', 'voy voy');
+        setTimeout(() => {
+          addTyping('mafioso');
+          setTimeout(() => {
+            removeTyping();
+            addMsg('mafioso', '', true);
+            setTimeout(() => {
+              kittyBtn.style.display = 'block';
+            }, 1200);
+          }, 20000);
+        }, 1000);
+      }, 1200);
+    });
+    // Confeti
+    function launchConfetti() {
+      // Más confeti
+      for (let i = 0; i < 300; i++) {
+        const conf = document.createElement('div');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.background = `hsl(${Math.random()*360},80%,60%)`;
+        conf.style.animationDuration = (Math.random()*1.5+2.5) + 's';
+        conf.style.width = conf.style.height = (Math.random()*8+8) + 'px';
+        conf.style.top = '-30px';
+        conf.style.position = 'fixed';
+        conf.style.zIndex = 2000;
+        conf.style.borderRadius = '50%';
+        conf.style.opacity = 0.85;
+        conf.style.pointerEvents = 'none';
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 4000);
+      }
+    }
+    kittyBtn.addEventListener('click', function() {
+      launchConfetti();
+      this.disabled = true;
+      this.textContent = '¡Felicidades!';
+    });
+    // Confeti CSS
+    const style = document.createElement('style');
+    style.innerHTML = `.confetti {animation: confetti-fall linear forwards;}@keyframes confetti-fall {0%{transform:translateY(0);}100%{transform:translateY(110vh);}}`;
+    document.head.appendChild(style);
+    // Iniciar chat
+    startChat();
   </script>
 </body>
 </html>
