@@ -75,28 +75,56 @@ function checkSudoku() {
   // Mostrar resultado y controlar visibilidad de la IP y buscador
   const result = document.getElementById("result");
   const ipSection = document.getElementById("ip-section");
+  const cipherMsg = document.getElementById("cipher-msg");
+  const mafiosoAccessBtn = document.getElementById("mafioso-access-btn");
+  const cipherText = document.getElementById("cipher-text");
+  const cipherMsgHint = document.querySelector('.cipher-msg > div:nth-child(2)');
+
   if (isCorrect) {
     result.textContent = "¡Correcto! Has resuelto la matriz localizadora.";
     result.classList.remove("hidden");
     result.style.color = "green";
     ipSection.classList.remove("hidden");
+    // Mostrar el pop-up interceptado automáticamente
+    if(cipherMsg) {
+      cipherMsg.style.display = 'block';
+      setTimeout(() => { cipherMsg.classList.add('visible'); }, 10);
+    }
+    if(cipherText) {
+      // Mensaje cifrado
+      let encryptedMsg = 'pagina web ver furros ligeros de ropa';
+      cipherText.textContent = caesarEncrypt(encryptedMsg, 3);
+    }
+    if(cipherMsgHint) cipherMsgHint.style.display = 'block';
   } else {
     result.textContent = "Hay errores en la Matriz. Revisa las celdas resaltadas.";
     result.classList.remove("hidden");
     result.style.color = "red";
     ipSection.classList.add("hidden");
-    // Además, ocultar el mensaje interceptado si el sudoku se vuelve incorrecto
-    const cipherMsg = document.getElementById("cipher-msg");
     if(cipherMsg) cipherMsg.classList.remove("visible");
-    const mafiosoAccessBtn = document.getElementById("mafioso-access-btn");
     if(mafiosoAccessBtn) mafiosoAccessBtn.style.display = 'none';
-    const cipherText = document.getElementById("cipher-text");
     if(cipherText) cipherText.textContent = '';
-    // Ocultar el mensaje encriptado
-    const cipherMsgHint = document.querySelector('.cipher-msg > div:nth-child(2)');
     if(cipherMsgHint) cipherMsgHint.style.display = 'none';
   }
 }
+
+// Revela un número correcto en una casilla vacía aleatoria
+window.revealSudokuHint = function() {
+  const grid = document.getElementById("sudoku-grid");
+  const inputs = grid.querySelectorAll("input");
+  // Buscar celdas vacías y no fijas
+  const emptyInputs = Array.from(inputs).filter(input => {
+    return !input.classList.contains("fixed") && (!input.value || input.value.trim() === "");
+  });
+  if (emptyInputs.length === 0) return; // Nada que revelar
+  // Elegir una celda vacía aleatoria
+  const randomInput = emptyInputs[Math.floor(Math.random() * emptyInputs.length)];
+  const row = parseInt(randomInput.dataset.row, 10);
+  const col = parseInt(randomInput.dataset.col, 10);
+  randomInput.value = solution[row][col];
+  randomInput.style.backgroundColor = "#0f08";
+  setTimeout(() => { randomInput.style.backgroundColor = ""; }, 1200);
+};
 
 // Ejecutar la función cuando la página termine de cargar
 // También conectar el botón de verificar
@@ -130,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const ipSearchBtn = document.getElementById("ip-search-btn");
   const ipInput = document.getElementById("ip-input");
   let correctIp = '192.168.0.1';
-  let encryptedMsg = 'El ordenador está protegido. La clave está en tu ingenio.';
+  let encryptedMsg = 'pagina web ver furros ligeros de ropa';
   function caesarEncrypt(str, shift) {
     return str.replace(/[a-zA-Z]/g, function(c) {
       let base = c <= 'Z' ? 65 : 97;

@@ -89,9 +89,16 @@
     .mrc-actions {
       margin-top: 24px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       gap: 16px;
+      justify-content: center;
+    }
+    #result {
+      margin-top: 18px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.1em;
     }
     .ip-row {
       display: flex;
@@ -161,16 +168,18 @@
   <canvas class="matrix"></canvas>
   <div class="container">
     <h2>MRC</h2>
-    <div class="mrc-desc">Se trata de una Matriz Receptora de Comunicaciones (MRC). Su función es encontrar la IP del mafioso para conocer su ubicación e interceptar mensajes que haya enviado.</div>
+    <div class="mrc-desc">Se trata de una Matriz Receptora de Comunicaciones (MRC). Su función es encontrar la IP del mafioso para conocer su ubicación e interceptar mensajes que haya enviado. El botón de verificar te ayudará a ver los erroes, además te ayudaré si le das 3 veces a verificar.</div>
     <div id="sudoku-grid"></div>
     <div class="mrc-actions">
       <button id="verify-btn">Verificar</button>
-      <div id="ip-section" class="hidden">
-        <div class="ip-result" id="ip-result">IP encontrada: <span id="found-ip">192.168.0.1</span></div>
-        <div class="ip-row">
-          <input type="text" id="ip-input" placeholder="Introduce la IP">
-          <button id="ip-search-btn">Buscar</button>
-        </div>
+      <button id="help-btn" style="display:none; margin-left:8px;">Ayuda</button>
+    </div>
+    <div id="result" class="hidden"></div>
+    <div id="ip-section" class="hidden">
+      <div class="ip-result" id="ip-result">IP encontrada: <span id="found-ip">192.168.0.1</span></div>
+      <div class="ip-row">
+        <input type="text" id="ip-input" placeholder="Introduce la IP">
+        <button id="ip-search-btn">Buscar</button>
       </div>
     </div>
     <div id="cipher-msg" class="cipher-msg">
@@ -214,6 +223,7 @@
     });
     // Lógica MRC extra
     const verifyBtn = document.getElementById('verify-btn');
+    const helpBtn = document.getElementById('help-btn');
     const ipSection = document.getElementById('ip-section');
     const foundIp = document.getElementById('found-ip');
     const ipInput = document.getElementById('ip-input');
@@ -242,18 +252,23 @@
     
     ipSearchBtn.onclick = function() {
       if(ipInput.value.trim() === correctIp) {
-        cipherMsg.style.display = 'block';
-        setTimeout(() => { cipherMsg.classList.add('visible'); }, 10);
-        cipherText.textContent = caesarEncrypt(encryptedMsg, 3);
         mafiosoAccessBtn.style.display = 'block';
-        document.querySelector('.cipher-msg > div:nth-child(2)').style.display = 'block';
       } else {
-        cipherMsg.classList.remove('visible');
-        cipherMsg.style.display = 'none';
         mafiosoAccessBtn.style.display = 'none';
-        document.querySelector('.cipher-msg > div:nth-child(2)').style.display = 'none';
       }
     };
+    let verifyCount = 0;
+    verifyBtn.addEventListener('click', function() {
+      verifyCount++;
+      if (verifyCount === 3) {
+        helpBtn.style.display = 'inline-block';
+      }
+    });
+    helpBtn.addEventListener('click', function() {
+      if (typeof window.revealSudokuHint === 'function') {
+        window.revealSudokuHint();
+      }
+    });
     mafiosoAccessBtn.onclick = function() {
       window.location.href = 'hackeo.html';
     };
